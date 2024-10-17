@@ -1,7 +1,6 @@
 import os
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.orm import sessionmaker, declarative_base
-os.system("clear || cls")
 
 MEU_BANCO = create_engine("sqlite:///meubanco.db")
 
@@ -25,16 +24,47 @@ while True:
         case 1:
             Base = declarative_base()
 
-            class Usuario(Base):
-                __tablename__ = "usuarios"
+            class Funcionario(Base):
+                __tablename__ = "funcionario"
 
                 # Definindo campos da tabela.
                 id = Column("id", Integer, primary_key=True, autoincrement=True)
                 nome = Column("nome", String)
-                email = Column("email", String)
-                senha = Column("senha", String)
+                idade = Column("idade", String)
+                cpf = Column("cpf", String)
+                setor = Column("setor", String)
+                funcao = Column("funcao", String)
+                salario = Column("salario", String)
+                telefone = Column("telefone", String)
 
-                def __init__(self, nome: str, email: str, senha: str):
-                    self.nome = nome
-                    self.email = email
-                    self.senha = senha
+                class Funcionario:
+                    def __init__(self, nome: str, idade: str, cpf: str, setor: str, funcao: str, salario: str, telefone: str):
+                        self.nome = nome
+                        self.idade = idade
+                        self.cpf = cpf
+                        self.setor = setor
+                        self.funcao = funcao
+                        self.salario = salario
+                        self.telefone = telefone
+                        
+            Base.metadata.create_all(bind=MEU_BANCO)
+
+            os.system("cls || clear")
+
+            print("Solicitando dados para o usuário")
+            inf_nome = input("Digite seu nome: ")
+            inf_idade = input("Digite sua idade: ")
+            inf_cpf = input("Digite seu cpf: ")
+            inf_setor = input("Digite seu setor: ")
+            inf_funcao = input("Digite sua funcao: ")
+            inf_salario = input("Digite seu salario: ")
+            inf_telefone = input("Digite seu telefone: ")
+
+            Funcionarios = Funcionario(nome = inf_nome, idade = inf_idade, cpf = inf_cpf, setor = inf_setor, funcao = inf_funcao, salario = inf_salario, telefone = inf_telefone)
+            Session.add(Funcionarios)
+            Session.commit()
+        case 2:
+            print("\nExibindo todos os usuários do banco de dados.")
+            Lista_funcionarios = Session.query(Funcionarios).all()
+            for funcionarios in Lista_funcionarios:
+                print(f"{funcionarios.id} - {funcionarios.nome} - {funcionarios.idade} - {funcionarios.cpf} - {funcionarios.setor}- {funcionarios.funcao}- {funcionarios.salario}- {funcionarios.telefone}")
