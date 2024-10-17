@@ -1,2 +1,40 @@
 import os
+from sqlalchemy import create_engine, Column, String, Integer
+from sqlalchemy.orm import sessionmaker, declarative_base
 os.system("clear || cls")
+
+MEU_BANCO = create_engine("sqlite:///meubanco.db")
+
+Session = sessionmaker(bind=MEU_BANCO)
+Session = Session()
+while True:
+    # Menu
+    print("""
+        === RH System ===
+    1 - Adicionar funcionário
+    2 - Consultar um funcionário
+    3 - Atualizar os dados de um funcionário
+    4 - Excluir um funcionário
+    5 - Listar todos os funcionários
+    0 - Sair do sistema.
+        """)
+    
+    Codigo = int(input("Digite o código: "))
+
+    match Codigo:
+        case 1:
+            Base = declarative_base()
+
+            class Usuario(Base):
+                __tablename__ = "usuarios"
+
+                # Definindo campos da tabela.
+                id = Column("id", Integer, primary_key=True, autoincrement=True)
+                nome = Column("nome", String)
+                email = Column("email", String)
+                senha = Column("senha", String)
+
+                def __init__(self, nome: str, email: str, senha: str):
+                    self.nome = nome
+                    self.email = email
+                    self.senha = senha
