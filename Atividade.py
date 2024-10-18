@@ -14,7 +14,7 @@ class Funcionario(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String)
     idade = Column(String)
-    cpf = Column(String, unique=True)  # CPF deve ser único
+    cpf = Column(String, unique=True) 
     setor = Column(String)
     funcao = Column(String)
     salario = Column(String)
@@ -42,7 +42,7 @@ def pesquisar_um_funcionario(cpf):
 
 def atualizar_funcionario(funcionario):
     session = Session()
-    session.commit()  # Supondo que o funcionário já está atualizado
+    session.commit()
     session.close()
 
 def excluir_funcionario(funcionario):
