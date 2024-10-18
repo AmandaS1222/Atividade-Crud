@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# banco de dados
+# Banco de dados
 DADOS = create_engine("sqlite:///meubanco.db")
 Session = sessionmaker(bind=DADOS)
 Base = declarative_base()
@@ -14,13 +14,42 @@ class Funcionario(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String)
     idade = Column(String)
-    cpf = Column(String)
+    cpf = Column(String, unique=True)  # CPF deve ser único
     setor = Column(String)
     funcao = Column(String)
     salario = Column(String)
     telefone = Column(String)
 
 Base.metadata.create_all(bind=DADOS)
+
+def salvar_funcionario(funcionario):
+    session = Session()
+    session.add(funcionario)
+    session.commit()
+    session.close()
+
+def listar_todos_funcionarios():
+    session = Session()
+    funcionarios = session.query(Funcionario).all()
+    session.close()
+    return funcionarios
+
+def pesquisar_um_funcionario(cpf):
+    session = Session()
+    funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
+    session.close()
+    return funcionario
+
+def atualizar_funcionario(funcionario):
+    session = Session()
+    session.commit()  # Supondo que o funcionário já está atualizado
+    session.close()
+
+def excluir_funcionario(funcionario):
+    session = Session()
+    session.delete(funcionario)
+    session.commit()
+    session.close()
 
 while True:
     # Menu
@@ -39,7 +68,7 @@ while True:
     match codigo:
         case 1:
             os.system("cls || clear")
-            #Solicitando dados para o usuário
+            # Solicitar dados para o usuário
             inf_nome = input("Digite seu nome: ")
             inf_idade = input("Digite sua idade: ")
             inf_cpf = input("Digite seu CPF: ")
@@ -48,7 +77,6 @@ while True:
             inf_salario = input("Digite seu salário: ")
             inf_telefone = input("Digite seu telefone: ")
 
-            session = Session()
             novo_funcionario = Funcionario(
                 nome=inf_nome,
                 idade=inf_idade,
@@ -58,18 +86,14 @@ while True:
                 salario=inf_salario,
                 telefone=inf_telefone
             )
-            session.add(novo_funcionario)
-            session.commit()
-            session.close()
+            salvar_funcionario(novo_funcionario)
             print("Funcionário adicionado com sucesso!")
 
         case 2:
             os.system("cls || clear")
-            #Buscando o funcionario
+            # Buscando o funcionario
             cpf = input("Digite o CPF do funcionário que deseja consultar: ")
-            session = Session()
-            funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
-            session.close()
+            funcionario = pesquisar_um_funcionario(cpf)
 
             if funcionario:
                 print(f"Nome: {funcionario.nome}, Idade: {funcionario.idade}, Setor: {funcionario.setor}, Função: {funcionario.funcao}, Salário: {funcionario.salario}, Telefone: {funcionario.telefone}")
@@ -78,10 +102,9 @@ while True:
 
         case 3:
             os.system("cls || clear")
-            #Atualizando o funcionario
+            # Atualizando o funcionario
             cpf = input("Digite o CPF do funcionário que deseja atualizar: ")
-            session = Session()
-            funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
+            funcionario = pesquisar_um_funcionario(cpf)
 
             if funcionario:
                 funcionario.nome = input("Digite o novo nome: ") 
@@ -91,33 +114,27 @@ while True:
                 funcionario.salario = input("Digite o novo salário: ") 
                 funcionario.telefone = input("Digite o novo telefone: ") 
 
-                session.commit()
+                atualizar_funcionario(funcionario)
                 print("Dados do funcionário atualizados com sucesso!")
             else:
                 print("Funcionário não encontrado.")
-            session.close()
 
         case 4:
             os.system("cls || clear")
-            #Excluindo o funcionario
+            # Excluindo o funcionario
             cpf = input("Digite o CPF do funcionário que deseja excluir: ")
-            session = Session()
-            funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
+            funcionario = pesquisar_um_funcionario(cpf)
 
             if funcionario:
-                session.delete(funcionario)
-                session.commit()
+                excluir_funcionario(funcionario)
                 print(f"{funcionario.nome} excluído com sucesso.")
             else:
                 print("Funcionário não encontrado.")
-            session.close()
 
         case 5:
             os.system("cls || clear")
-            #Listando o funcionario
-            session = Session()
-            funcionarios = session.query(Funcionario).all()
-            session.close()
+            # Listando o funcionario
+            funcionarios = listar_todos_funcionarios()
 
             if funcionarios:
                 for f in funcionarios:
@@ -126,7 +143,7 @@ while True:
                 print("Nenhum funcionário cadastrado.")
 
         case 0:
-            #Saindo
+            # Saindo
             print("Saindo do sistema...")
             break
 
