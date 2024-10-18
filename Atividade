@@ -39,7 +39,7 @@ while True:
     match codigo:
         case 1:
             os.system("cls || clear")
-            print("Solicitando dados para o usuário")
+            #Solicitando dados para o usuário
             inf_nome = input("Digite seu nome: ")
             inf_idade = input("Digite sua idade: ")
             inf_cpf = input("Digite seu CPF: ")
@@ -65,6 +65,7 @@ while True:
 
         case 2:
             os.system("cls || clear")
+            #Buscando o funcionario
             cpf = input("Digite o CPF do funcionário que deseja consultar: ")
             session = Session()
             funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
@@ -77,6 +78,7 @@ while True:
 
         case 3:
             os.system("cls || clear")
+            #Atualizando o funcionario
             cpf = input("Digite o CPF do funcionário que deseja atualizar: ")
             session = Session()
             funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
@@ -97,6 +99,7 @@ while True:
 
         case 4:
             os.system("cls || clear")
+            #Excluindo o funcionario
             cpf = input("Digite o CPF do funcionário que deseja excluir: ")
             session = Session()
             funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
@@ -111,6 +114,7 @@ while True:
 
         case 5:
             os.system("cls || clear")
+            #Listando o funcionario
             session = Session()
             funcionarios = session.query(Funcionario).all()
             session.close()
@@ -122,6 +126,7 @@ while True:
                 print("Nenhum funcionário cadastrado.")
 
         case 0:
+            #Saindo
             print("Saindo do sistema...")
             break
 
