@@ -84,12 +84,12 @@ while True:
             funcionario = session.query(Funcionario).filter_by(cpf=cpf).first()
 
             if funcionario:
-                funcionario.nome = input("Digite o novo nome: ") or funcionario.nome
-                funcionario.idade = input("Digite a nova idade: ") or funcionario.idade
-                funcionario.setor = input("Digite o novo setor: ") or funcionario.setor
-                funcionario.funcao = input("Digite a nova função: ") or funcionario.funcao
-                funcionario.salario = input("Digite o novo salário: ") or funcionario.salario
-                funcionario.telefone = input("Digite o novo telefone: ") or funcionario.telefone
+                funcionario.nome = input("Digite o novo nome: ") 
+                funcionario.idade = input("Digite a nova idade: ") 
+                funcionario.setor = input("Digite o novo setor: ") 
+                funcionario.funcao = input("Digite a nova função: ") 
+                funcionario.salario = input("Digite o novo salário: ") 
+                funcionario.telefone = input("Digite o novo telefone: ") 
 
                 session.commit()
                 print("Dados do funcionário atualizados com sucesso!")
